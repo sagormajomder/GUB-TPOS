@@ -1,16 +1,18 @@
 import { useState, useEffect, ChangeEvent } from "react";
-import GroupList from "../../features/supervisors/components/GroupList";
 import { AccountLayout } from "../../layouts/AccountLayout";
 import { useAppDispatch, useAppSelector } from "../../store";
 import { fetchGroups } from "../../features/board-members/boardMemberSlice";
 import { Stack, Select, Box } from "@chakra-ui/react";
-import { fetchGroupSemesters } from "../../features/thesis-committees/thesisCommitteeSlice";
+import { fetchGroup, fetchGroupSemesters } from "../../features/thesis-committees/thesisCommitteeSlice";
+import GroupList from "../../features/board-members/components/GroupList";
+import { StudentsMarkModal } from "../../features/board-members/components/StudentsMarkModal/StudentsMarkModal";
 
 export const BoardMemberGroups = () => {
     const dispatch = useAppDispatch();
     const { groups } = useAppSelector(x => x.boards);
     const { groupSemesters, semesterInfo } = useAppSelector(x => x.committees);
     const [selectedGroupSemester, setSelectedGroupSemester] = useState("");
+    const [showStudentMarksModal, setShowStudentMarksModal] = useState(false);
     useEffect(() => {
         dispatch(fetchGroupSemesters());
         dispatch(fetchGroups(semesterInfo));
@@ -28,6 +30,7 @@ export const BoardMemberGroups = () => {
 
     return (
         <AccountLayout loading={false}>
+            <StudentsMarkModal isOpen={showStudentMarksModal} onClose={() => setShowStudentMarksModal(false)} onSave={() => console.log('')} />
             <Box px={{ base: '4', md: '6' }} pt="5">
                 <Stack direction={{ base: 'column', md: 'row' }}>
                     <Select
@@ -45,7 +48,12 @@ export const BoardMemberGroups = () => {
                     </Select>
                 </Stack>
             </Box>
-            <GroupList groups={groups || []} />
+            <GroupList
+                groups={groups}
+                onViewStudentsMark={groupId => {
+                    dispatch(fetchGroup(groupId))
+                    setShowStudentMarksModal(true)
+                }} />
         </AccountLayout>
     )
 }

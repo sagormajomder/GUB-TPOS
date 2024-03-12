@@ -10,17 +10,18 @@ import {
   Box,
   HStack,
   IconButton,
+  Button,
 } from '@chakra-ui/react';
 import { GroupDto } from '../../../common/dtos';
-import { FiTrash2, FiEye } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
-import { FaCheck, FaCross, FaMinus } from 'react-icons/fa';
+import { FaEdit } from 'react-icons/fa';
 
 interface GroupTableProps {
   groups: GroupDto[];
+  onViewStudentsMark: (groupId: string) => void; 
 }
 
-const GroupList: React.FC<GroupTableProps> = ({ groups }) => {
+const GroupList: React.FC<GroupTableProps> = ({ groups, onViewStudentsMark }) => {
   return (
     <Box mx="auto" px={{ base: '6', md: '8' }}>
       <Table variant="simple">
@@ -28,7 +29,7 @@ const GroupList: React.FC<GroupTableProps> = ({ groups }) => {
           <Tr>
             <Th>Name</Th>
             <Th>Students</Th>
-            <Th>Mark Released</Th>
+            <Th>Marks</Th>
             <Th>Actions</Th>
           </Tr>
         </Thead>
@@ -45,17 +46,21 @@ const GroupList: React.FC<GroupTableProps> = ({ groups }) => {
                   </>
                 ))}
               </Td>
-              <Td>{group.supervisorMarks.isReleased ? <FaCheck></FaCheck> : <FaMinus></FaMinus>}</Td>
               <Td>
-                <HStack spacing="1">
-                  <IconButton
-                    as={Link}
-                    to={`/supervisor/groups/${group._id}`}
-                    icon={<FiEye fontSize="1.25rem" />}
-                    variant="ghost"
-                    aria-label="Edit member"
-                  />
-                </HStack>
+                <Button onClick={() => onViewStudentsMark(group._id)}>View Marks</Button>
+              </Td>
+              <Td>
+                {!group.boardMarks.isReleased && (
+                  <HStack spacing='1'>
+                    <IconButton
+                      as={Link}
+                      to={`/board/groups/${group._id}`}
+                      icon={<FaEdit fontSize='1.25rem' />}
+                      variant='ghost'
+                      aria-label='Edit member'
+                    />
+                  </HStack>
+                )}
               </Td>
             </Tr>
           ))}

@@ -11,7 +11,7 @@ export const BoardNotices = () => {
     console.log(notices);
 
     useEffect(() => {
-        dispatch(fetchNotices());
+        dispatch(fetchNotices("BOARD"));
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 

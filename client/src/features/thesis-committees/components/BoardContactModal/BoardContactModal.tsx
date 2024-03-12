@@ -1,15 +1,10 @@
 import {
-    Button,
-    FormControl,
-    FormLabel,
     Modal,
     ModalBody,
     ModalCloseButton,
     ModalContent,
-    ModalFooter,
     ModalHeader,
-    ModalOverlay,
-    Select
+    ModalOverlay
 } from "@chakra-ui/react"
 import React, { useEffect, useState } from "react"
 import { useAppSelector } from "../../../../store";

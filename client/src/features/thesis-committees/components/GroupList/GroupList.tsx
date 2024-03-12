@@ -1,7 +1,6 @@
 import {
   Avatar,
   Box,
-  Button,
   Flex,
   HStack,
   IconButton,
@@ -19,17 +18,20 @@ import { FiEdit2 } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 import { useAppSelector } from '../../../../store';
 import { GroupDto } from '../../../common/dtos';
+import Button from '../../../../components/Button';
 
 interface GroupTableProps {
   groups: GroupDto[];
   onSelectBoard: (group: GroupDto) => void;
   onSelectSupervisor: (group: GroupDto) => void;
+  onViewStudentsMark: (groupId: string) => void;
 }
 
 const GroupList: React.FC<GroupTableProps> = ({
   groups,
   onSelectBoard,
   onSelectSupervisor,
+  onViewStudentsMark,
 }) => {
   const { boardMembers } = useAppSelector(x => x.committees);
   return (
@@ -41,7 +43,7 @@ const GroupList: React.FC<GroupTableProps> = ({
             <Th>Students</Th>
             <Th>Supervisor</Th>
             <Th>Board Info</Th>
-            <Th>Action</Th>
+            <Th>Marks</Th>
           </Tr>
         </Thead>
         <Tbody>
@@ -94,15 +96,9 @@ const GroupList: React.FC<GroupTableProps> = ({
               </Td>
               <Td>
                 <Td>
-                  <HStack spacing='1'>
-                    <IconButton
-                      as={Link}
-                      to={`/committee/groups/${group._id}`}
-                      icon={<FiEdit2 fontSize='1.25rem' />}
-                      variant='ghost'
-                      aria-label='Edit member'
-                    />
-                  </HStack>
+                  <Button onClick={() => onViewStudentsMark(group._id)}>
+                    View Marks
+                  </Button>
                 </Td>
               </Td>
             </Tr>

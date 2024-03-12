@@ -2,10 +2,11 @@ import { ChangeEvent, useEffect, useState } from 'react'
 import { AccountLayout } from '../../layouts/AccountLayout';
 import GroupList from '../../features/thesis-committees/components/GroupList';
 import { useAppDispatch, useAppSelector } from '../../store';
-import { assignBoardToGroup, assignSupervisorToGroup, fetchBoardMembers, fetchGroupSemesters, fetchGroups } from '../../features/thesis-committees/thesisCommitteeSlice';
+import { assignBoardToGroup, assignSupervisorToGroup, fetchBoardMembers, fetchGroup, fetchGroupSemesters, fetchGroups, fetchSupervisors } from '../../features/thesis-committees/thesisCommitteeSlice';
 import { SelectBoardModal } from '../../features/thesis-committees/components/SelectBoardModal/SelectBoardModal';
 import { SelectSupervisorModal } from '../../features/thesis-committees/components/SelectSupervisorModal/SelectSupervisorModal';
 import { Stack, Select, Box } from '@chakra-ui/react';
+import { StudentsMarkModal } from '../../features/thesis-committees/components/StudentsMarkModal/StudentsMarkModal';
 
 export const CommitteeGroups = () => {
     const dispatch = useAppDispatch();
@@ -14,10 +15,12 @@ export const CommitteeGroups = () => {
     const [selectedGroup, setSelectedGroup] = useState('');
     const [showSupervisorSelectModal, setShowSupervisorSelectModal] = useState(false);
     const [selectedGroupSemester, setSelectedGroupSemester] = useState("");
+    const [showStudentMarksModal, setShowStudentMarksModal] = useState(false);
     useEffect(() => {
         dispatch(fetchGroupSemesters())
         dispatch(fetchGroups(semesterInfo))
         dispatch(fetchBoardMembers(semesterInfo));
+        dispatch(fetchSupervisors(semesterInfo));
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
@@ -33,6 +36,7 @@ export const CommitteeGroups = () => {
     const assignSupervisor = (supervisorId: string) => {
         if (supervisorId !== "") {
             dispatch(assignSupervisorToGroup({ groupId: selectedGroup, supervisorId }))
+            dispatch(fetchGroups(semesterInfo))
         }
         setShowSupervisorSelectModal(false);
     }
@@ -50,6 +54,7 @@ export const CommitteeGroups = () => {
         <AccountLayout loading={false}>
             <SelectBoardModal isOpen={showModal} onClose={() => setShowModal(false)} onSave={(boardId) => assignBoard(boardId)} />
             <SelectSupervisorModal isOpen={showSupervisorSelectModal} onClose={() => setShowSupervisorSelectModal(false)} onSave={(supervisorId) => assignSupervisor(supervisorId)} />
+            <StudentsMarkModal isOpen={showStudentMarksModal} onClose={() => setShowStudentMarksModal(false)} onSave={() => console.log('')} />
             <Box px={{ base: '4', md: '6' }} pt="5">
                 <Stack direction={{ base: 'column', md: 'row' }}>
                     <Select
@@ -75,7 +80,11 @@ export const CommitteeGroups = () => {
                 onSelectSupervisor={(group) => {
                     setShowSupervisorSelectModal(true);
                     setSelectedGroup(group._id);
-                }} />
+                }} 
+                onViewStudentsMark={groupId => {
+                    dispatch(fetchGroup(groupId))
+                    setShowStudentMarksModal(true)
+                }}/>
         </AccountLayout>
     )
 }

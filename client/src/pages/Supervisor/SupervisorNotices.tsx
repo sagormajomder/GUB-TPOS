@@ -10,7 +10,7 @@ export const SupervisorNotices = () => {
     const dispatch = useAppDispatch();
 
     useEffect(() => {
-        dispatch(fetchNotices());
+        dispatch(fetchNotices("SUPERVISOR"));
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 

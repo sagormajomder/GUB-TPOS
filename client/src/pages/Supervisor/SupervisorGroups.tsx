@@ -4,12 +4,14 @@ import GroupList from '../../features/supervisors/components/GroupList';
 import { useAppDispatch, useAppSelector } from '../../store';
 import { fetchGroups } from '../../features/supervisors/supervisorSlice';
 import { Box, Select, Stack } from '@chakra-ui/react';
-import { fetchGroupSemesters } from '../../features/thesis-committees/thesisCommitteeSlice';
+import { fetchGroup, fetchGroupSemesters } from '../../features/thesis-committees/thesisCommitteeSlice';
+import { StudentsMarkModal } from '../../features/supervisors/components/StudentsMarkModal/StudentsMarkModal';
 
 export const SupervisorGroups = () => {
     const { groups } = useAppSelector(x => x.supervisors);
     const { semesterInfo, groupSemesters } = useAppSelector(x => x.committees);
     const [selectedGroupSemester, setSelectedGroupSemester] = useState("");
+    const [showStudentMarksModal, setShowStudentMarksModal] = useState(false);
     const dispatch = useAppDispatch();
     useEffect(() => {
         dispatch(fetchGroupSemesters());
@@ -28,6 +30,7 @@ export const SupervisorGroups = () => {
 
     return (
         <AccountLayout loading={false}>
+            <StudentsMarkModal isOpen={showStudentMarksModal} onClose={() => setShowStudentMarksModal(false)} onSave={() => console.log('')} />
             <Box px={{ base: '4', md: '6' }} pt="5">
                 <Stack direction={{ base: 'column', md: 'row' }}>
                     <Select
@@ -45,7 +48,12 @@ export const SupervisorGroups = () => {
                     </Select>
                 </Stack>
             </Box>
-            <GroupList groups={groups} />
+            <GroupList
+                groups={groups}
+                onViewStudentsMark={groupId => {
+                    dispatch(fetchGroup(groupId))
+                    setShowStudentMarksModal(true)
+                }} />
         </AccountLayout>
     )
 }

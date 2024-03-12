@@ -18,21 +18,22 @@ const studentsData: UserAttrs[] = [
     name: "Test Student1",
     email: "student1@gmail.com",
     password: defaultPassword,
-    role: Roles.Student
+    role: Roles.Student,
+    idNumber: '123456789'
   },
   {
     name: "Test Student2",
     email: "student2@gmail.com",
     password: defaultPassword,
     role: Roles.Student,
-    idNumber: '123456'
+    idNumber: '123456789'
   },
   {
     name: "Test Student3",
     email: "student3@gmail.com",
     password: defaultPassword,
     role: Roles.Student,
-    idNumber: '123556'
+    idNumber: '123456789'
   }
 ]
 const committeesData: UserAttrs[] = [

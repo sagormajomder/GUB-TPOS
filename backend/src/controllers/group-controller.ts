@@ -96,6 +96,7 @@ export const assignMarkToGroup = async (req: Request, res: Response) => {
   if (!group) {
     throw new NotFoundError("Group not found");
   }
+  supervisorMarks.isAssigned = true;
   group.supervisorMarks = supervisorMarks
 
   // Save the updated group
@@ -236,11 +237,13 @@ export const acceptGroupRequest = async (req: Request, res: Response) => {
     semester: groupRequest.semester,
     semesterYear: groupRequest.semesterYear,
     boardMarks: {
+      isAssigned: false,
       isReleased: false,
       studentMarks: studentMarks
     },
     supervisorMarks: {
       isReleased: false,
+      isAssigned: false,
       studentMarks: studentMarks
     },
     boardComments: []

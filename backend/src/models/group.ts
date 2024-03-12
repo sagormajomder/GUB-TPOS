@@ -22,6 +22,7 @@ const groupSchema = new Schema({
   chat: { type: Schema.Types.ObjectId, ref: 'Chat' },
   boardMarks: {
     isReleased: { type: Boolean, default: false },
+    isAssigned: {type: Boolean, default: false},
     studentMarks: [{
       student: { type: Schema.Types.ObjectId, ref: 'User' },
       preDefence: { type: Number, required: true, min: [0, 'Marks should be minimum 0'], max: [5, 'Marks should be maximum 5'] },
@@ -34,6 +35,7 @@ const groupSchema = new Schema({
   },
   supervisorMarks: {
     isReleased: { type: Boolean, default: false },
+    isAssigned: {type: Boolean, default: false},
     studentMarks: [{
       student: { type: Schema.Types.ObjectId, ref: 'User' },
       preDefence: { type: Number, required: true, min: [0, 'Marks should be minimum 0'], max: [5, 'Marks should be maximum 5'] },

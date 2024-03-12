@@ -162,7 +162,7 @@ export const boardMemberLinks: Link[] = [
     },
     {
         href: '/account/notifications',
-        title: 'Notices',
+        title: 'Notifications',
         icon: MdNotificationsActive,
     },
     {

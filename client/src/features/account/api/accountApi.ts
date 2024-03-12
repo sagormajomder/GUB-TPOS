@@ -16,6 +16,7 @@ export interface LoginData {
 export interface UpdateProfileData {
   id: string;
   name: string;
+  researchInterests: string[]
 }
 
 export interface RegistrationResponse {

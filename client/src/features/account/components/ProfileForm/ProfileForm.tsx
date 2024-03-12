@@ -13,6 +13,8 @@ import {
     Text,
     useColorModeValue as mode, useToast,
     VStack,
+    Flex,
+    IconButton,
 } from '@chakra-ui/react'
 import { HiCloudUpload } from 'react-icons/hi'
 import { useEffect, useState } from 'react'
@@ -21,6 +23,7 @@ import { useAppDispatch, useAppSelector } from '../../../../store'
 import { FieldGroup } from '../FieldGroup';
 import { User } from '../../models/User';
 import { UpdateProfileData, useUpdateProfileMutation } from '../../api/accountApi';
+import { CloseIcon, AddIcon } from '@chakra-ui/icons';
 
 const initialValues: User = {
     isActive: true,
@@ -34,15 +37,33 @@ export const ProfileForm = () => {
     const [loading, setLoading] = useState(false);
     const toast = useToast();
     const [updateUserProfile, { data, isSuccess, isError }] = useUpdateProfileMutation();
-    const { semesterInfo } = useAppSelector(x => x.committees)
+    const { semesterInfo } = useAppSelector(x => x.committees);
+    const [researchInterests, setResearchInterests] = useState<string[]>(user!.researchInterests || []);
 
     const onUpdateProfile = async (values: any) => {
         const updateUser: UpdateProfileData = {
             id: user?.id!,
-            name: values.name
+            name: values.name,
+            researchInterests: researchInterests
         }
         await updateUserProfile(updateUser);
     }
+
+    const handleAddResearchInterest = () => {
+        setResearchInterests((prevInterests) => [...prevInterests, '']);
+    };
+
+    const handleRemoveResearchInterest = (index: number) => {
+        setResearchInterests((prevInterests) =>
+            prevInterests.filter((_, i) => i !== index)
+        );
+    };
+
+    const handleResearchInterestChange = (index: number, value: string) => {
+        setResearchInterests((prevInterests) =>
+            prevInterests.map((interest, i) => (i === index ? value : interest))
+        );
+    };
 
     useEffect(() => {
         if (isSuccess) {
@@ -102,6 +123,42 @@ export const ProfileForm = () => {
                                     </HStack>
                                 </VStack>
                             </FieldGroup>
+                            {user?.role === "Supervisor" && (
+                                <Box>
+                                    <Text fontSize="xl" mb={4}>
+                                        Research Interests
+                                    </Text>
+                                    <Stack spacing={4}>
+                                        {researchInterests.map((interest, index) => (
+                                            <Flex key={index} align="center">
+                                                <Input
+                                                    type="text"
+                                                    placeholder="Enter research interest"
+                                                    value={interest}
+                                                    onChange={(e) =>
+                                                        handleResearchInterestChange(index, e.target.value)
+                                                    }
+                                                />
+                                                <IconButton
+                                                    aria-label="Remove research interest"
+                                                    icon={<CloseIcon />}
+                                                    ml={2}
+                                                    onClick={() => handleRemoveResearchInterest(index)}
+                                                />
+                                            </Flex>
+                                        ))}
+                                    </Stack>
+                                    <Button
+                                        leftIcon={<AddIcon />}
+                                        colorScheme="teal"
+                                        variant="outline"
+                                        mt={4}
+                                        onClick={handleAddResearchInterest}
+                                    >
+                                        Add Research Interest
+                                    </Button>
+                                </Box>
+                            )}
                         </Stack>
                         <FieldGroup mt="8">
                             <HStack width="full">

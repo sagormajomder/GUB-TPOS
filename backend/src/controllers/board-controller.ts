@@ -74,7 +74,7 @@ export const assignMarkToGroup = async (req: Request, res: Response) => {
 
   const schema = Joi.object({
     groupId: Joi.string().required(), // Assuming groupId is a string representing ObjectId
-    supervisorMarks: Joi.object({
+    boardMarks: Joi.object({
       isReleased: Joi.boolean().required(),
       studentMarks: Joi.array().items(
         Joi.object({
@@ -104,6 +104,7 @@ export const assignMarkToGroup = async (req: Request, res: Response) => {
   if (!group) {
     throw new NotFoundError("Group not found");
   }
+  boardMarks.isAssigned = true;
   group.boardMarks = boardMarks
 
   // Save the updated group

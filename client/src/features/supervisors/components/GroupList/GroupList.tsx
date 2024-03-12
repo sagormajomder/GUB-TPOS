@@ -11,17 +11,16 @@ import {
   Tr,
 } from '@chakra-ui/react';
 import React from 'react';
-import { FaCheck, FaEdit, FaMinus } from 'react-icons/fa';
-import { FiEye } from 'react-icons/fi';
+import { FaEdit } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
-import { GroupDto } from '../../../common/dtos';
 import Button from '../../../../components/Button';
 
 interface GroupTableProps {
-  groups: GroupDto[];
+  groups: any;
+  onViewStudentsMark: (groupId: string) => void;
 }
 
-const GroupList: React.FC<GroupTableProps> = ({ groups }) => {
+const GroupList: React.FC<GroupTableProps> = ({ groups, onViewStudentsMark }) => {
   console.log(groups);
 
   return (
@@ -37,32 +36,33 @@ const GroupList: React.FC<GroupTableProps> = ({ groups }) => {
           </Tr>
         </Thead>
         <Tbody>
-          {groups.map(group => (
+          {groups.map((group: any) => (
             <Tr key={group._id}>
               <Td>{group.name}</Td>
               <Td>
-                {group.students.map(s => (
+                {group.students.map((s: any) => (
                   <div key={s.id}>
                     <Text>{s.idNumber}</Text>
                     <Text>{s.name}</Text>
                   </div>
                 ))}
               </Td>
-              {/* <Td>{group.supervisorMarks.isReleased ? <FaCheck></FaCheck> : <FaMinus></FaMinus>}</Td> */}
-              <Td>{group.board ? group.board : 'NA'}</Td>
+              <Td>{group.board ? group.board.title : 'NA'}</Td>
               <Td>
-                <Button>View Marks</Button>
+                <Button onClick={() => onViewStudentsMark(group._id)}>View Marks</Button>
               </Td>
               <Td>
-                <HStack spacing='1'>
-                  <IconButton
-                    as={Link}
-                    to={`/supervisor/groups/${group._id}`}
-                    icon={<FaEdit fontSize='1.25rem' />}
-                    variant='ghost'
-                    aria-label='Edit member'
-                  />
-                </HStack>
+                {!group.supervisorMarks.isReleased && (
+                  <HStack spacing='1'>
+                    <IconButton
+                      as={Link}
+                      to={`/supervisor/groups/${group._id}`}
+                      icon={<FaEdit fontSize='1.25rem' />}
+                      variant='ghost'
+                      aria-label='Edit member'
+                    />
+                  </HStack>
+                )}
               </Td>
             </Tr>
           ))}

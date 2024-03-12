@@ -81,7 +81,8 @@ export const Login = async (req: Request, res: Response) => {
             email: existingUser.email,
             role: role,
             name: existingUser.name,
-            idNumber: existingUser.idNumber
+            idNumber: existingUser.idNumber,
+            researchInterests: existingUser.researchInterests
         },
         process.env.JWT_KEY!
     );
@@ -142,7 +143,8 @@ export const Register = async (req: Request, res: Response) => {
             email: user.email,
             role: user.role,
             name: name,
-            idNumber: user.idNumber
+            idNumber: user.idNumber,
+            researchInterests: user.researchInterests
         },
         process.env.JWT_KEY!
     );
@@ -221,6 +223,7 @@ export const RegisterSupervisor = async (req: Request, res: Response) => {
             email: user.email,
             role: user.role,
             name: name,
+            researchInterests: user.researchInterests
         },
         process.env.JWT_KEY!
     );
@@ -247,9 +250,10 @@ export const SupervisorList = async (req: Request, res: Response) => {
 };
 
 export const UpdateProfile = async (req: Request, res: Response) => {
-    const { id, name } = req.body;
+    const { id, name, researchInterests } = req.body;
     const updatedUser = await User.findByIdAndUpdate(id, {
         name,
+        researchInterests
     });
     if (!updatedUser) {
         throw new NotFoundError('User not found')

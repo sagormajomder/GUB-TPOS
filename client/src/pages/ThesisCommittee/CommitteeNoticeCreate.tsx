@@ -16,7 +16,7 @@ export const CommitteeNoticeCreate = () => {
             toast({
                 title: 'Task created.',
                 position: 'top-right',
-                description: "Task successfully created!.",
+                description: "Notice successfully created!.",
                 status: 'success',
                 duration: 3000,
                 isClosable: true,
@@ -27,7 +27,16 @@ export const CommitteeNoticeCreate = () => {
     }, [isSuccess])
 
     const onCreateNotice = async (notice: Notice) => {
-        await createNotice(notice);
+        const formData = new FormData();
+        formData.append('noticeFor', notice.noticeFor);
+        formData.append('title', notice.title);
+        formData.append('content', notice.content);
+        if (notice.files) {
+          for (let i = 0; i < notice.files.length; i++) {
+            formData.append('files', notice.files[i]);
+          }
+        }
+        await createNotice(formData);
     }
 
     useEffect(() => {

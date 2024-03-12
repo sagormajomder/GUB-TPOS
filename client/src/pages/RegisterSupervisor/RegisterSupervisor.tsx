@@ -9,7 +9,6 @@ import {
 import { motion } from 'framer-motion';
 import * as React from 'react'
 import { Link } from "react-router-dom";
-import { RegisterForm } from '../../features/account/components/RegisterForm';
 import logo from "../../assets/images/Logo.png"
 import { RegisterSupervisorForm } from '../../features/account/components/RegisterSupervisorForm';
 

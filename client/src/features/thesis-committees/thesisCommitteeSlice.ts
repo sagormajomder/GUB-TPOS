@@ -115,8 +115,8 @@ export const createBoardMember = createAsyncThunk('thesisCommittee/createBoardMe
   return response.data;
 });
 
-export const fetchNotices = createAsyncThunk('thesisCommittee/fetchNotices', async () => {
-  const response = await axios.get<Notice[]>(`${BASE_URL}/api/committees/notices`);
+export const fetchNotices = createAsyncThunk('thesisCommittee/fetchNotices', async (noticeFor: string) => {
+  const response = await axios.get<Notice[]>(`${BASE_URL}/api/committees/notices?noticeFor=${noticeFor}`);
   return response.data;
 });
 

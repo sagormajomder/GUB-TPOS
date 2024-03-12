@@ -3,6 +3,7 @@ import { Task } from "../models";
 
 export interface Mark {
     isReleased: boolean;
+    isAssigned?: boolean;
     studentMarks: {
       student: string;
       defence: string;

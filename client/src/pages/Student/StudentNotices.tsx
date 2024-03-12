@@ -11,7 +11,7 @@ export const StudentNotices = () => {
     console.log(notices);
 
     useEffect(() => {
-        dispatch(fetchNotices());
+        dispatch(fetchNotices("STUDENT"));
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 

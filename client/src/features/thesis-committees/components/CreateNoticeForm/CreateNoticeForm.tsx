@@ -76,7 +76,6 @@ const CreateNoticeForm: React.FC<CreateNoticeFormProps> = ({ onCreateNotice }) =
                         type="file"
                         onChange={handleFileChange}
                         multiple
-                        accept=".pdf,.doc,.docx"
                     />
                 </FormControl>
             </FieldGroup>

@@ -187,13 +187,16 @@ export const createNotice = async (req: Request, res: Response) => {
   const noticeValidator = Joi.object({
     title: Joi.string().required(),
     content: Joi.string().required(),
-    noticeFor: Joi.string().valid(...Object.values(NoticeFor)).required(),
-    files: Joi.optional()
+    noticeFor: Joi.string().valid(...Object.values(NoticeFor)).required()
   });
 
-  const { title, content, noticeFor, files } = req.body;
+  const { title, content, noticeFor } = req.body;
 
   const { error } = noticeValidator.validate(req.body);
+
+  const reqFiles: Express.Multer.File[] = req.files as Express.Multer.File[];
+
+  const files = reqFiles.map(f => f.filename);
 
   if (error) {
     const errors = error.details.map(err => {
@@ -220,13 +223,20 @@ export const createNotice = async (req: Request, res: Response) => {
 
 // Get notices based on the target audience
 export const getNotices = async (req: Request, res: Response) => {
-  const { noticeFor } = req.params;
+  const { noticeFor } = req.query;
+
+  // Define the query
+  let query: any = {};
+
+  if (noticeFor !== NoticeFor.ALL) {
+    query.noticeFor = noticeFor;
+  }
 
   // Query notices based on the target audience
-  const notices = await Notice.find({ noticeFor: { $in: [noticeFor, NoticeFor.ALL] } });
+  const notices = await Notice.find(query);
 
   res.json(notices);
-};
+}
 
 // Get list of groups
 export const getGroups = async (req: Request, res: Response) => {

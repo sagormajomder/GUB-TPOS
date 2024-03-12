@@ -7,7 +7,10 @@ import {
   Th,
   Td,
   Box,
+  HStack,
+  Text
 } from '@chakra-ui/react';
+import { BASE_URL } from '../../../../config';
 import { Notice } from '../../../thesis-committees/thesisCommitteeSlice';
 
 interface NoticeTableProps {
@@ -15,6 +18,18 @@ interface NoticeTableProps {
 }
 
 const NoticeList: React.FC<NoticeTableProps> = ({ notices }) => {
+  const handleDownload = (filename: string) => {
+    // Construct the download URL
+    const downloadUrl = `${BASE_URL}/download/${filename}`;
+
+    // Trigger the download by creating a temporary link
+    const link = document.createElement('a');
+    link.href = downloadUrl;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
   return (
     <Box mx="auto" px={{ base: '6', md: '8' }}>
       <Table variant="simple">
@@ -23,6 +38,7 @@ const NoticeList: React.FC<NoticeTableProps> = ({ notices }) => {
             <Th>Title</Th>
             <Th>Content</Th>
             <Th>For</Th>
+            <Th>Attachments</Th>
             <Th>CreatedAt</Th>
           </Tr>
         </Thead>
@@ -32,6 +48,17 @@ const NoticeList: React.FC<NoticeTableProps> = ({ notices }) => {
               <Td>{notice.title}</Td>
               <Td>{notice.content}</Td>
               <Td>{notice.noticeFor}</Td>
+              <Td>
+              {notice.attachments?.map((attachment: any) => {
+                return (
+                  <HStack mt={3}>
+                    <Box>
+                      <Text color={'green.400'} cursor={'pointer'} onClick={() => handleDownload(attachment)}>{attachment}</Text>
+                    </Box>
+                  </HStack>
+                )
+              })}
+              </Td>
               <Td>{notice.createdAt}</Td>
             </Tr>
           ))}

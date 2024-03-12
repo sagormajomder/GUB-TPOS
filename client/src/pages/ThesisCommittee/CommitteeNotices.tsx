@@ -14,7 +14,7 @@ export const CommitteeNotices = () => {
     console.log(notices);
 
     useEffect(() => {
-        dispatch(fetchNotices());
+        dispatch(fetchNotices("ALL"));
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
